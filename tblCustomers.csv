@@ -1,0 +1,23 @@
+﻿CustomerID,CsFirstName,CsLastName,CsAddress,CsCity,CsStateProvince,CsZIPPostal,CsCountry,CsPhone,CsEmail,CsNotes,CsActive
+1,James,Krenoff,555 Skunk Hollow Road,Stoystown,PA,15563,USA,5553941212,krenoff@blamenancy.com,,TRUE
+2,Art,Nuvo,36 Gallows Hill Road,Walker Valley,NY,12588,USA,,arturo@arturosmillworks.com,,TRUE
+3,Doug,Frydd,231A Commerce Park,Otisville,NY,10963,USA,,doogie@zz.com,,TRUE
+4,Charlie,Greene,1776 Heritage Road,Chapel Hill,NC,27514,USA,,greenie@blamenancy.com,,TRUE
+5,Sagawa,Hidetaka,56 Main Street,Java,NY,14082,USA,,sag@nemail.com,,TRUE
+6,Howard,Salinger,4353 Sam Gonsalez Road,Bloomingburg,NY,12721,USA,,salhoward@howardmaps.com,,TRUE
+7,Connor,Craig,34 Gallows Hill Road,Walker Valley,NY,12588,USA,,ck@maloof.com,,TRUE
+8,William,Morris,7311 Fourth Section Road,Fox's Corners,ON,K9V 4R3,Canada,7339801201,boss@nemail.com,,TRUE
+9,George,Nakashima,83453 County Road 44,St. Jacobs,ON,N0B 2N0,Canada,5356042332,Nak57@recycledhw57.com,,TRUE
+10,Abe,Norman,321 Lumber Mountain Road,Otisville,NY,10963,USA,1564441221,norm@nemail.com,,TRUE
+11,Jenny,Lind,323 Muskrat Alley,Burlington,VT,05452,USA,1250989645,jennifer.lind@ogpugg.com,,TRUE
+12,Gertrude,Stickley,14 Stickley Woods Trail,Wurtsboro,NY,12790,USA,,gertie@stickleysellswood.com,,TRUE
+13,Alan,Thomas,9009 Canal Street,Hooversville,PA,15936,USA,1252661224,atom@nemail.com,,TRUE
+14,Aaron,O'Brien,33023 Jolly Road,Watkins Glen,NY,14818,USA,5454456544,a-ron@ob.com,,TRUE
+15,James,Hendricks,54312 Festival Road,Woodstock,NY,12498,USA,,henj@purplehz.com,,TRUE
+16,Bob,Davis,12322 Shawanga Lodge Rd,Bloomingburg,NY,12721,USA,,bdav1@jj.com,,TRUE
+17,Jay,Nufryk,32422 Avenue of Commerce,Clarendon,NY,14429,USA,5852342232,jn@nuf.com,,TRUE
+18,Henry,Maudsley,2700 Lackawanna Road,Mount Morris,NY,14510,USA,,hankm@nemail.com,,TRUE
+19,Dave,Grisman,543 Lumber Mountain Road,Otisville,NY,10963,USA,1564241221,david@davedawg.com,,TRUE
+20,Caileigh,O'Brien,33023 Jolly Road,Watkins Glen,NY,14818,USA,5454456556,cail@ze.com,,TRUE
+21,Salvadore,Howard,4467 Shawanga Lodge Rd,Bloomingburg,NY,12721,USA,5551234567,sal.howard@access4ever.com,,TRUE
+22,Archie,Mead,31416 Pi Circle,Round Lake,NY,12151,USA,3141592653,archie@circular.biz,,TRUE

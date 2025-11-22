@@ -1,0 +1,12 @@
+﻿ContractorID,CnCompanyName,CnWebPage,CnLastName,CnFirstName,CnEmail,CnPhone,CnAddress,CnCity,CnStateProvince,CnZIPPostal,CnCountry,CnNotes,CnActive
+1,Artie's Mill Works,https://www.arturosmillworks.com,Nuvo,Arturo,arturo@artiemillworks.com,8451229493,1 Hazen Street,Andes,NY,13731,USA,Not on-call on weekends,TRUE
+2,Ray's Plumbing & Electric,https://www.contractorray.com,L'Hommedieu,Raymond,ray@vdub.com,8453446344,4 Sullivan Trail,Middletown,NY,10940,USA,,TRUE
+3,Rick's Renovations,https://www.contractorforum.biz,Fiorito,Richard,rick@nemail.com,8452134567,16 Shawanga Lodge Road,Bloomingburg,NY,12721,USA,,TRUE
+4,F. L. Wright Architectural,https://www.flwrightarch.com,Wright,Frank,frank@nemail.com,2223335551,349 Maynard Street,Brockport,NY,14420,USA,,TRUE
+5,Robert Davis Remodeler,https://www.contractorforum.biz,Davis,Bob,bdav1@jj.com,8459525423,12322 Shawanga Lodge Rd,Bloomingburg,NY,12721,USA,,TRUE
+6,Oaks Construction,https://www.oaksconst.com,Canalungo,Daniel,dan@oaksconstruction.com,5869921783,832 Main Street,Margaretville,NY,12455,USA,,TRUE
+7,Cannonball Contracting,https://www.cbcont.com,Adderley,Julian,cannonball@nemail.com,8457679988,3 Bay Park Place,Gananoque,ON,K7G2N4,Canada,,TRUE
+8,Take Five Woodworks,https://www.t5woodworks.com,Alleno,Tomas,atom@tfw.com,5702661224,411 Pocono Place,Matamoras,PA,18336,USA,,TRUE
+9,Waller Excavation,https://www.wallerexcavation.com,Waller,Thomas,tom@wallerexcavation.com,8452313342,2131 Route 34,Walker Valley,NY,12566,USA,,TRUE
+10,Johnson Automation,https://www.jhas.biz,Johnson,Jeff,jeff@jhas.biz,8452313555,512 Route 34,Walker Valley,NY,12566,USA,"Can do electrical work, but mainly works on security systems.",TRUE
+11,JB Renovations,https://www.boucher.ca,Boucher,Jules,jules@boucher.ca,6134845555,825 Oak Alley,Gananoque,ON,K7G1Q3,Canada,,TRUE

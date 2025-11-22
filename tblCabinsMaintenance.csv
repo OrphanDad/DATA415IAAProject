@@ -1,0 +1,9 @@
+﻿MaintenanceID,MnCabinID,MnDate,MnCost,MnServiceTypeID,MnContractorID,MnNotes
+2,5,8/17/2018,220.00,1,1,New outlets in kitchen
+3,1,8/21/2018,110.00,8,5,Fixed side door
+4,2,8/21/2018,423.32,1,2,New cable drop
+5,3,8/20/2018,750.00,6,3,New stone fire pit and seating
+6,4,8/14/2018,"1,255.00",8,1,Replace back porch stairs and railing
+7,3,8/23/2018,832.00,11,10,Set up security cameras
+8,1,8/22/2018,54.00,2,2,Fixed leaky faucets
+9,1,8/31/2018,845.00,7,5,Sand and apply stain to the deck
