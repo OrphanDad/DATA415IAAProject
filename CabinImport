@@ -1,0 +1,300 @@
+/* 1. Create and use the database */
+CREATE DATABASE IF NOT EXISTS cabin_dw;
+USE cabin_dw;
+
+/* Turn off foreign key checks while we load data */
+SET FOREIGN_KEY_CHECKS = 0;
+
+/* 2. Create all tables */
+
+/* Lookup table for booking status (C, D, P, X) */
+CREATE TABLE IF NOT EXISTS tblBookingsStatusList (
+    StatusID       CHAR(1) PRIMARY KEY,
+    BsDescription  VARCHAR(50)
+);
+
+/* Customers who book cabins */
+CREATE TABLE IF NOT EXISTS tblCustomers (
+    CustomerID        INT PRIMARY KEY,
+    CsFirstName       VARCHAR(50),
+    CsLastName        VARCHAR(50),
+    CsAddress         VARCHAR(100),
+    CsCity            VARCHAR(50),
+    CsStateProvince   VARCHAR(50),
+    CsZIPPostal       VARCHAR(20),
+    CsCountry         VARCHAR(50),
+    CsPhone           VARCHAR(20),
+    CsEmail           VARCHAR(100),
+    CsNotes           TEXT,
+    CsActive          BOOLEAN
+);
+
+/* Cabins */
+CREATE TABLE IF NOT EXISTS tblCabins (
+    CabinID          INT PRIMARY KEY,
+    CbName           VARCHAR(100),
+    CbStdRate        DECIMAL(10,2),
+    CbStdTaxAndFees  DECIMAL(10,2),
+    CbMinNights      INT,
+    CbAddress        VARCHAR(100),
+    CbCity           VARCHAR(50),
+    CbStateProvince  VARCHAR(50),
+    CbZIPPostal      VARCHAR(20),
+    CbCountry        VARCHAR(50),
+    CbLatitude       DECIMAL(10,6),
+    CbLongitude      DECIMAL(10,6),
+    CbSquareFeet     INT,
+    CbWebPage        VARCHAR(200),
+    CbDescription    TEXT,
+    CbImages         INT,
+    CbActive         BOOLEAN
+);
+
+/* Features (parking, pool, etc.) */
+CREATE TABLE IF NOT EXISTS tblFeatures (
+    FeatureID    INT PRIMARY KEY,
+    Feature      VARCHAR(50),
+    Description  TEXT
+);
+
+/* Bridge: which cabins have which features */
+CREATE TABLE IF NOT EXISTS tblCabinsFeatures (
+    CfCabinID    INT,
+    CfFeatureID  INT,
+    PRIMARY KEY (CfCabinID, CfFeatureID),
+    FOREIGN KEY (CfCabinID)  REFERENCES tblCabins(CabinID),
+    FOREIGN KEY (CfFeatureID) REFERENCES tblFeatures(FeatureID)
+);
+
+/* Room counts per cabin */
+CREATE TABLE IF NOT EXISTS tblCabinsRooms (
+    CrCabinID    INT PRIMARY KEY,
+    CrSleeps     INT,
+    CrBedrooms   INT,
+    CrFullBaths  INT,
+    CrHalfBaths  INT,
+    CrPrivies    INT,
+    FOREIGN KEY (CrCabinID) REFERENCES tblCabins(CabinID)
+);
+
+/* Service types for maintenance (electrical, plumbing, etc.) */
+CREATE TABLE IF NOT EXISTS tblServicesTypes (
+    ServiceTypeID   INT PRIMARY KEY,
+    StServiceName   VARCHAR(100)
+);
+
+/* Contractors who do maintenance */
+CREATE TABLE IF NOT EXISTS tblContractors (
+    ContractorID     INT PRIMARY KEY,
+    CnCompanyName    VARCHAR(100),
+    CnWebPage        VARCHAR(200),
+    CnLastName       VARCHAR(50),
+    CnFirstName      VARCHAR(50),
+    CnEmail          VARCHAR(100),
+    CnPhone          VARCHAR(20),
+    CnAddress        VARCHAR(100),
+    CnCity           VARCHAR(50),
+    CnStateProvince  VARCHAR(50),
+    CnZIPPostal      VARCHAR(20),
+    CnCountry        VARCHAR(50),
+    CnNotes          TEXT,
+    CnActive         BOOLEAN
+);
+
+/* Bridge: which contractor offers which service type */
+CREATE TABLE IF NOT EXISTS tblContractorsServices (
+    CsContractorID   INT,
+    CsServiceTypeID  INT,
+    PRIMARY KEY (CsContractorID, CsServiceTypeID),
+    FOREIGN KEY (CsContractorID)  REFERENCES tblContractors(ContractorID),
+    FOREIGN KEY (CsServiceTypeID) REFERENCES tblServicesTypes(ServiceTypeID)
+);
+
+/* Maintenance events on cabins */
+CREATE TABLE IF NOT EXISTS tblCabinsMaintenance (
+    MaintenanceID    INT PRIMARY KEY,
+    MnCabinID        INT,
+    MnDate           VARCHAR(20),
+    MnCost           VARCHAR(20),
+    MnServiceTypeID  INT,
+    MnContractorID   INT,
+    MnNotes          TEXT,
+    FOREIGN KEY (MnCabinID)       REFERENCES tblCabins(CabinID),
+    FOREIGN KEY (MnServiceTypeID) REFERENCES tblServicesTypes(ServiceTypeID),
+    FOREIGN KEY (MnContractorID)  REFERENCES tblContractors(ContractorID)
+);
+
+/* Payments methods lookup (Check, Cash, etc.) */
+CREATE TABLE IF NOT EXISTS tblPaymentsMethods (
+    MethodID      INT PRIMARY KEY,
+    PmMethodName  VARCHAR(50)
+);
+
+/* Bookings (reservations) */
+CREATE TABLE IF NOT EXISTS tblBookings (
+    BookingID            INT PRIMARY KEY,
+    BkCustomerID         INT,
+    BkCabinID            INT,
+    BkStartDate          VARCHAR(20),
+    BkEndDate            VARCHAR(20),
+    BkNights             INT,
+    BkBookedRate         DECIMAL(10,2),
+    BkBookedTaxAndFees   DECIMAL(10,2),
+    BkTotalCost          DECIMAL(10,2),
+    BkGuestCount         INT,
+    BkStatus             CHAR(1),
+    BkNotes              TEXT,
+    FOREIGN KEY (BkCustomerID) REFERENCES tblCustomers(CustomerID),
+    FOREIGN KEY (BkCabinID)    REFERENCES tblCabins(CabinID),
+    FOREIGN KEY (BkStatus)     REFERENCES tblBookingsStatusList(StatusID)
+);
+
+/* Payments made for bookings */
+CREATE TABLE IF NOT EXISTS tblPayments (
+    PaymentID     INT PRIMARY KEY,
+    PayMethodID   INT,
+    PayBookingID  INT,
+    PayDate       VARCHAR(20),
+    PayAmount     DECIMAL(10,2),
+    PayNotes      TEXT,
+    FOREIGN KEY (PayMethodID)  REFERENCES tblPaymentsMethods(MethodID),
+    FOREIGN KEY (PayBookingID) REFERENCES tblBookings(BookingID)
+);
+
+/* 3. Load data from your CSV UTF-8 files */
+
+/* NOTE: the path below matches your screenshot:
+   C:\Users\eethi\OneDrive\Desktop\University\DATA415\IAA Project Dataset\CSV UTF-8 Files
+   In MySQL, backslashes must be written as \\ inside the string.
+*/
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblBookingsStatusList.csv'
+INTO TABLE tblBookingsStatusList
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(StatusID, BsDescription);
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblCustomers.csv'
+INTO TABLE tblCustomers
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(CustomerID, CsFirstName, CsLastName, CsAddress, CsCity, CsStateProvince,
+ CsZIPPostal, CsCountry, CsPhone, CsEmail, CsNotes, CsActive);
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblCabins.csv'
+INTO TABLE tblCabins
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(CabinID, CbName, CbStdRate, CbStdTaxAndFees, CbMinNights,
+ CbAddress, CbCity, CbStateProvince, CbZIPPostal, CbCountry,
+ CbLatitude, CbLongitude, CbSquareFeet, CbWebPage,
+ CbDescription, CbImages, CbActive);
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblFeatures.csv'
+INTO TABLE tblFeatures
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(FeatureID, Feature, Description);
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblCabinsFeatures.csv'
+INTO TABLE tblCabinsFeatures
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(CfCabinID, CfFeatureID);
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblCabinsRooms.csv'
+INTO TABLE tblCabinsRooms
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(CrCabinID, CrSleeps, CrBedrooms, CrFullBaths, CrHalfBaths, CrPrivies);
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblServicesTypes.csv'
+INTO TABLE tblServicesTypes
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(ServiceTypeID, StServiceName);
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblContractors.csv'
+INTO TABLE tblContractors
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(ContractorID, CnCompanyName, CnWebPage, CnLastName, CnFirstName,
+ CnEmail, CnPhone, CnAddress, CnCity, CnStateProvince,
+ CnZIPPostal, CnCountry, CnNotes, CnActive);
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblContractorsServices.csv'
+INTO TABLE tblContractorsServices
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(CsContractorID, CsServiceTypeID);
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblCabinsMaintenance.csv'
+INTO TABLE tblCabinsMaintenance
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(MaintenanceID, MnCabinID, MnDate, MnCost, MnServiceTypeID, MnContractorID, MnNotes);
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblPaymentsMethods.csv'
+INTO TABLE tblPaymentsMethods
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(MethodID, PmMethodName);
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblBookings.csv'
+INTO TABLE tblBookings
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(BookingID, BkCustomerID, BkCabinID, BkStartDate, BkEndDate,
+ BkNights, BkBookedRate, BkBookedTaxAndFees, BkTotalCost,
+ BkGuestCount, BkStatus, BkNotes);
+
+LOAD DATA LOCAL INFILE
+  'C:\\Users\\eethi\\OneDrive\\Desktop\\University\\DATA415\\IAA Project Dataset\\CSV UTF-8 Files\\tblPayments.csv'
+INTO TABLE tblPayments
+FIELDS TERMINATED BY ',' ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(PaymentID, PayMethodID, PayBookingID, PayDate, PayAmount, PayNotes);
+
+/* Turn foreign key checks back on */
+SET FOREIGN_KEY_CHECKS = 1;
+
+/* 4. Quick row-count check to confirm everything loaded */
+
+SELECT 'tblBookingsStatusList' AS table_name, COUNT(*) AS row_count FROM tblBookingsStatusList
+UNION ALL SELECT 'tblCustomers',          COUNT(*) FROM tblCustomers
+UNION ALL SELECT 'tblCabins',             COUNT(*) FROM tblCabins
+UNION ALL SELECT 'tblFeatures',           COUNT(*) FROM tblFeatures
+UNION ALL SELECT 'tblCabinsFeatures',     COUNT(*) FROM tblCabinsFeatures
+UNION ALL SELECT 'tblCabinsRooms',        COUNT(*) FROM tblCabinsRooms
+UNION ALL SELECT 'tblServicesTypes',      COUNT(*) FROM tblServicesTypes
+UNION ALL SELECT 'tblContractors',        COUNT(*) FROM tblContractors
+UNION ALL SELECT 'tblContractorsServices',COUNT(*) FROM tblContractorsServices
+UNION ALL SELECT 'tblCabinsMaintenance',  COUNT(*) FROM tblCabinsMaintenance
+UNION ALL SELECT 'tblPaymentsMethods',    COUNT(*) FROM tblPaymentsMethods
+UNION ALL SELECT 'tblBookings',           COUNT(*) FROM tblBookings
+UNION ALL SELECT 'tblPayments',           COUNT(*) FROM tblPayments;
